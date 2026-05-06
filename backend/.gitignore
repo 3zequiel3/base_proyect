@@ -1,0 +1,70 @@
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.envrc
+
+# Python bytecode / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+pip-wheel-metadata/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+.hypothesis/
+
+# Logs
+*.log
+logs/
+
+# Runtime files
+*.pid
+*.sock
+
+# Local databases / dumps
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.sql
+
+# Alembic local artifacts
+alembic/versions/__pycache__/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Uvicorn / reload artifacts
+.watchfiles*
