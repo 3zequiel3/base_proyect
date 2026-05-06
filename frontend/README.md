@@ -1,73 +1,163 @@
-# React + TypeScript + Vite
+# Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend base con **React**, **TypeScript**, **Vite** y **Tailwind CSS**.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- ESLint
+- pnpm
 
-## React Compiler
+## Estructura
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```txt
+frontend/
+├── public/
+│   ├── favicon.svg
+│   └── icons.svg
+├── src/
+│   ├── assets/
+│   ├── App.tsx
+│   ├── index.css
+│   └── main.tsx
+├── eslint.config.js
+├── index.html
+├── package.json
+├── pnpm-lock.yaml
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite.config.ts
+├── .gitignore
+└── README.md
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Archivos principales
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### `src/main.tsx`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Punto de entrada de React. Monta la aplicación en el DOM.
+
+### `src/App.tsx`
+
+Componente raíz de la aplicación.
+
+En forks, desde acá se suele conectar:
+
+- routing
+- layout principal
+- providers globales
+- páginas iniciales
+
+### `src/index.css`
+
+Estilos globales.
+
+También es el lugar base para importar/configurar Tailwind CSS.
+
+### `vite.config.ts`
+
+Configuración de Vite.
+
+Actualmente define el plugin de React y la integración con Tailwind.
+
+### `public/`
+
+Assets estáticos servidos directamente por Vite.
+
+Ejemplos:
+
+- favicons
+- iconos
+- imágenes públicas
+
+### `src/assets/`
+
+Assets importados desde componentes React.
+
+## Convención sugerida para crecer
+
+Cuando el frontend empiece a crecer, se recomienda organizar por features o módulos.
+
+Ejemplo:
+
+```txt
+src/
+├── app/
+│   ├── router.tsx
+│   └── providers.tsx
+├── shared/
+│   ├── components/
+│   ├── hooks/
+│   ├── lib/
+│   └── types/
+├── modules/
+│   └── users/
+│       ├── components/
+│       ├── pages/
+│       ├── services/
+│       └── types.ts
+├── App.tsx
+├── index.css
+└── main.tsx
 ```
+
+## Variables de entorno
+
+Vite expone al frontend solo variables que empiezan con:
+
+```txt
+VITE_
+```
+
+Ejemplo recomendado:
+
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+Si se agrega un `.env.example`, debe quedar versionado. Los `.env` reales están ignorados por `.gitignore`.
+
+## Instalación
+
+Desde `frontend/`:
+
+```bash
+pnpm install
+```
+
+## Ejecución
+
+Desde `frontend/`:
+
+```bash
+pnpm dev
+```
+
+## Build
+
+```bash
+pnpm build
+```
+
+## Lint
+
+```bash
+pnpm lint
+```
+
+## Preview de producción
+
+```bash
+pnpm preview
+```
+
+## Notas
+
+- No versionar `node_modules/`.
+- No subir `.env` reales.
+- Mantener componentes compartidos en `shared/` cuando existan.
+- Mantener lógica específica de negocio dentro de `modules/`.
