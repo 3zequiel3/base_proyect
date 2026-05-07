@@ -2,6 +2,8 @@
 
 Frontend base con **React**, **TypeScript**, **Vite** y **Tailwind CSS**.
 
+La estructura está pensada para crecer por **features**, manteniendo separado lo compartido, la comunicación con APIs y el routing.
+
 ## Stack
 
 - React
@@ -11,7 +13,7 @@ Frontend base con **React**, **TypeScript**, **Vite** y **Tailwind CSS**.
 - ESLint
 - pnpm
 
-## Estructura
+## Estructura actual
 
 ```txt
 frontend/
@@ -19,7 +21,40 @@ frontend/
 │   ├── favicon.svg
 │   └── icons.svg
 ├── src/
+│   ├── api/
+│   │   └── .gitkeep
 │   ├── assets/
+│   │   ├── hero.png
+│   │   ├── react.svg
+│   │   └── vite.svg
+│   ├── components/
+│   │   ├── common/
+│   │   │   └── .gitkeep
+│   │   ├── layout/
+│   │   │   └── .gitkeep
+│   │   └── ui/
+│   │       └── .gitkeep
+│   ├── features/
+│   │   └── example-feature/
+│   │       ├── components/
+│   │       │   └── .gitkeep
+│   │       ├── hooks/
+│   │       │   └── .gitkeep
+│   │       ├── pages/
+│   │       │   └── .gitkeep
+│   │       ├── services/
+│   │       │   └── .gitkeep
+│   │       └── types/
+│   │           └── .gitkeep
+│   ├── lib/
+│   │   ├── constants/
+│   │   │   └── .gitkeep
+│   │   ├── helpers/
+│   │   │   └── .gitkeep
+│   │   └── utils/
+│   │       └── .gitkeep
+│   ├── router/
+│   │   └── .gitkeep
 │   ├── App.tsx
 │   ├── index.css
 │   └── main.tsx
@@ -35,34 +70,158 @@ frontend/
 └── README.md
 ```
 
-## Archivos principales
+## Criterio de carpetas
 
 ### `src/main.tsx`
 
-Punto de entrada de React. Monta la aplicación en el DOM.
+Punto de entrada de React. Monta la app en el DOM.
 
 ### `src/App.tsx`
 
-Componente raíz de la aplicación.
+Componente raíz.
 
-En forks, desde acá se suele conectar:
+Debería mantenerse liviano y delegar en:
 
-- routing
-- layout principal
+- router
+- layouts
 - providers globales
-- páginas iniciales
+- páginas principales
 
-### `src/index.css`
+### `src/router/`
 
-Estilos globales.
+Configuración de rutas de la aplicación.
 
-También es el lugar base para importar/configurar Tailwind CSS.
+Ejemplos futuros:
 
-### `vite.config.ts`
+```txt
+src/router/
+├── AppRouter.tsx
+└── routes.tsx
+```
 
-Configuración de Vite.
+### `src/api/`
 
-Actualmente define el plugin de React y la integración con Tailwind.
+Código compartido para comunicación HTTP.
+
+Ejemplos futuros:
+
+```txt
+src/api/
+├── client.ts
+├── endpoints.ts
+└── errors.ts
+```
+
+Uso esperado:
+
+- configurar `fetch`/cliente HTTP
+- manejar base URL
+- interceptores o helpers comunes
+- normalizar errores de API
+
+### `src/components/`
+
+Componentes compartidos por toda la app.
+
+#### `components/ui/`
+
+Componentes visuales reutilizables y de bajo nivel.
+
+Ejemplos:
+
+- `Button`
+- `Input`
+- `Modal`
+- `Card`
+
+#### `components/layout/`
+
+Componentes de estructura.
+
+Ejemplos:
+
+- `MainLayout`
+- `Sidebar`
+- `Header`
+- `Footer`
+
+#### `components/common/`
+
+Componentes comunes no necesariamente UI primitiva ni layout.
+
+Ejemplos:
+
+- `LoadingState`
+- `EmptyState`
+- `ErrorMessage`
+
+### `src/features/`
+
+Cada feature o módulo funcional vive en su propia carpeta.
+
+Estructura base:
+
+```txt
+src/features/<feature-name>/
+├── components/
+├── hooks/
+├── pages/
+├── services/
+└── types/
+```
+
+#### `features/<feature>/components/`
+
+Componentes específicos de esa feature.
+
+#### `features/<feature>/hooks/`
+
+Hooks específicos de esa feature.
+
+#### `features/<feature>/pages/`
+
+Pantallas o páginas de esa feature.
+
+#### `features/<feature>/services/`
+
+Funciones que llaman a `src/api/` o encapsulan lógica de acceso a datos para esa feature.
+
+#### `features/<feature>/types/`
+
+Tipos TypeScript específicos de esa feature.
+
+### `src/lib/`
+
+Utilidades compartidas que no pertenecen a una feature concreta.
+
+#### `lib/constants/`
+
+Constantes globales.
+
+#### `lib/helpers/`
+
+Helpers de negocio o transformaciones reutilizables.
+
+#### `lib/utils/`
+
+Utilidades genéricas.
+
+Ejemplos:
+
+- formateo
+- validaciones simples
+- manejo de strings
+- helpers de fechas
+
+### `src/assets/`
+
+Assets importados desde componentes React.
+
+Ejemplos:
+
+- imágenes
+- SVGs
+- recursos usados por componentes
 
 ### `public/`
 
@@ -70,56 +229,37 @@ Assets estáticos servidos directamente por Vite.
 
 Ejemplos:
 
-- favicons
-- iconos
-- imágenes públicas
+- favicon
+- iconos públicos
+- archivos estáticos que no pasan por el bundle
 
-### `src/assets/`
+## Convenciones
 
-Assets importados desde componentes React.
-
-## Convención sugerida para crecer
-
-Cuando el frontend empiece a crecer, se recomienda organizar por features o módulos.
-
-Ejemplo:
-
-```txt
-src/
-├── app/
-│   ├── router.tsx
-│   └── providers.tsx
-├── shared/
-│   ├── components/
-│   ├── hooks/
-│   ├── lib/
-│   └── types/
-├── modules/
-│   └── users/
-│       ├── components/
-│       ├── pages/
-│       ├── services/
-│       └── types.ts
-├── App.tsx
-├── index.css
-└── main.tsx
-```
+- Lo compartido va en `components/`, `api/` o `lib/`.
+- Lo específico de negocio va en `features/<feature>/`.
+- Una feature no debería depender internamente de otra feature salvo que sea una decisión explícita.
+- `App.tsx` y `main.tsx` deberían mantenerse simples.
+- Los servicios de una feature deberían usar helpers comunes de `src/api/`.
 
 ## Variables de entorno
 
-Vite expone al frontend solo variables que empiezan con:
+Vite solo expone variables que empiezan con:
 
 ```txt
 VITE_
 ```
 
-Ejemplo recomendado:
+Ejemplo:
 
 ```env
 VITE_API_URL=http://localhost:8000
 ```
 
-Si se agrega un `.env.example`, debe quedar versionado. Los `.env` reales están ignorados por `.gitignore`.
+Los `.env` reales no se versionan. Si se agrega un template, debe llamarse:
+
+```txt
+.env.example
+```
 
 ## Instalación
 
@@ -129,9 +269,7 @@ Desde `frontend/`:
 pnpm install
 ```
 
-## Ejecución
-
-Desde `frontend/`:
+## Desarrollo
 
 ```bash
 pnpm dev
@@ -159,5 +297,5 @@ pnpm preview
 
 - No versionar `node_modules/`.
 - No subir `.env` reales.
-- Mantener componentes compartidos en `shared/` cuando existan.
-- Mantener lógica específica de negocio dentro de `modules/`.
+- Mantener la estructura por features para evitar que `src/` se vuelva difícil de mantener.
+- Los `.gitkeep` existen solo para conservar carpetas vacías en Git; se pueden borrar cuando haya archivos reales.
